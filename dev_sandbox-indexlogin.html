@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="METAVERSE - Virtual Gaming World. Play games, customize avatars, and explore the metaverse!">
+  <meta name="theme-color" content="#00A2FF">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Apple iOS Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="METAVERSE">
+  
+  <title>METAVERSE - Imagination Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'HCo Gotham SSm', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #191B1D;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 80px;
+      background: #111213;
+      border-bottom: 1px solid #393b3d;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .nav-brand:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-logo {
+      font-size: 36px;
+    }
+
+    .nav-title {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00A2FF, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .user-profile {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: rgba(0, 162, 255, 0.1);
+      border: 2px solid #00A2FF;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .user-profile:hover {
+      background: rgba(0, 162, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .profile-avatar {
+      font-size: 24px;
+    }
+
+    .profile-name {
+      font-weight: 700;
+      color: #00A2FF;
+    }
+
+    .nav-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-login {
+      background: transparent;
+      color: #ffffff;
+      border: 2px solid #393b3d;
+    }
+
+    .btn-login:hover {
+      background: #232527;
+      border-color: #00A2FF;
+    }
+
+    .btn-signup {
+      background: linear-gradient(135deg, #00A2FF, #0088cc);
+      color: #ffffff;
+    }
+
+    .btn-signup:hover {
+      background: linear-gradient(135deg, #0088cc, #00A2FF);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 162, 255, 0.3);
+    }
+
+    /* Hero Carousel Section */
+    .hero-section {
+      padding: 60px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, #ffffff, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 60px;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .slide-background {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+    }
+
+    .slide-background::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%);
+    }
+
+    .game-preview {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 280px;
+      z-index: 2;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.6), 0 0 0 3px rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(20px);
+    }
+
+    .preview-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 140px;
+      position: relative;
+    }
+
+    .preview-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0, 162, 255, 0.95);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 2;
+      padding: 60px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .slide-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .slide-title {
+      font-size: 56px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    }
+
+    .slide-desc {
+      font-size: 20px;
+      color: #ddd;
+      max-width: 600px;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .slide-stats {
+      display: flex;
+      gap: 30px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .slide-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00d2ff;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 3;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: #00A2FF;
+      width: 30px;
+      border-radius: 5px;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      color: white;
+      border: none;
+      font-size: 32px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 3;
+      transition: all 0.2s;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(0, 162, 255, 0.8);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-btn.prev {
+      left: 20px;
+    }
+
+    .carousel-btn.next {
+      right: 20px;
+    }
+
+    /* Featured Games Grid */
+    .section {
+      padding: 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .section-link {
+      color: #00A2FF;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .section-link:hover {
+      color: #00d2ff;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .game-card {
+      background: #111213;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: #00A2FF;
+      box-shadow: 0 12px 30px rgba(0, 162, 255, 0.2);
+    }
+
+    .game-thumbnail {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-info {
+      padding: 16px;
+    }
+
+    .game-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .game-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Features Section */
+    .features-section {
+      background: #0f1011;
+      padding: 80px;
+      margin: 60px 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 40px 30px;
+      background: #191B1D;
+      border-radius: 16px;
+      border: 2px solid #232527;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: #00A2FF;
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 162, 255, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: #00A2FF;
+    }
+
+    .feature-desc {
+      font-size: 16px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f1011;
+      padding: 40px 80px;
+      text-align: center;
+      border-top: 1px solid #232527;
+    }
+
+    .footer-brand {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00A2FF, #00d2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .footer-text {
+      color: #666;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .navbar, .hero-section, .section {
+        padding: 20px 40px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        padding: 0 40px;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-buttons {
+        gap: 8px;
+      }
+
+      .nav-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      .slide-title {
+        font-size: 36px;
+      }
+
+      .slide-desc {
+        font-size: 16px;
+      }
+
+      .carousel-wrapper {
+        height: 400px;
+      }
+
+      .game-preview {
+        display: none;
+      }
+
+      .slide-content {
+        background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.7));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="nav-brand" onclick="goToHome()">
+      <div class="nav-logo">🌐</div>
+      <div class="nav-title">METAVERSE</div>
+    </div>
+    <div class="nav-buttons">
+      <div class="user-profile" id="user-profile" onclick="goToGame()">
+        <span class="profile-avatar" id="profile-avatar">🤖</span>
+        <span class="profile-name" id="profile-name">Player</span>
+      </div>
+      <button class="nav-btn btn-login" id="login-btn" onclick="goToLogin()">Login</button>
+      <button class="nav-btn btn-signup" id="signup-btn" onclick="goToLogin()">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero Carousel Section -->
+  <section class="hero-section">
+    <h1 class="hero-title">✨ Featured Experiences</h1>
+    
+    <div class="carousel-wrapper">
+      <div class="carousel-track" id="carousel-track">
+        <!-- Slides will be dynamically inserted -->
+      </div>
+      
+      <button class="carousel-btn prev" onclick="prevSlide()">‹</button>
+      <button class="carousel-btn next" onclick="nextSlide()">›</button>
+      
+      <div class="carousel-nav" id="carousel-nav">
+        <!-- Dots will be dynamically inserted -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Games Section -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Trending Now</h2>
+      <span class="section-link" onclick="goToLogin()">See All →</span>
+    </div>
+    
+    <div class="games-grid" id="games-grid">
+      <!-- Game cards will be dynamically inserted -->
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <div class="feature-title">Play Infinite Games</div>
+        <div class="feature-desc">Dive into thousands of immersive experiences created by a global community of developers</div>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">👤</div>
+        <div class="feature-title">Be Anything</div>
+        <div class="feature-desc">Customize your avatar with millions of items and accessories from the catalog</div>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <div class="feature-title">Meet Friends</div>
+        <div class="feature-desc">Connect with millions of people and make new friends in shared virtual experiences</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-brand">METAVERSE</div>
+    <div class="footer-text">© 2026 METAVERSE Corporation. Imagination Powered.</div>
+  </footer>
+
+  <script>
+    // Carousel data
+    const slides = [
+      {
+        id: 'parkour',
+        icon: '🏃',
+        title: 'Meta Parkour Rush',
+        desc: 'Jump, climb, and race through neon-lit obstacle courses',
+        bg: 'linear-gradient(135deg, #00A2FF, #0066cc)',
+        players: '2.4K',
+        likes: '98%'
+      },
+      {
+        id: 'battle',
+        icon: '⚔️',
+        title: 'Arena Battle Royale',
+        desc: 'Fight your way to victory in intense PvP combat',
+        bg: 'linear-gradient(135deg, #fd79a8, #e84393)',
+        players: '1.2K',
+        likes: '94%'
+      },
+      {
+        id: 'meteor',
+        icon: '☄️',
+        title: 'Asteroid Survival',
+        desc: 'Dodge falling meteors and survive the longest',
+        bg: 'linear-gradient(135deg, #ff4500, #8b0000)',
+        players: '1.1K',
+        likes: '92%'
+      },
+      {
+        id: 'race',
+        icon: '🏎️',
+        title: 'Cyber Speed Race',
+        desc: 'Race through futuristic tracks at lightning speed',
+        bg: 'linear-gradient(135deg, #ff6b6b, #ee5a24)',
+        players: '980',
+        likes: '96%'
+      },
+      {
+        id: 'coin',
+        icon: '💰',
+        title: 'Coin Collector VR',
+        desc: 'Catch falling coins and build your fortune',
+        bg: 'linear-gradient(135deg, #ffd700, #ffaa00)',
+        players: '1.8K',
+        likes: '95%'
+      }
+    ];
+
+    // Trending games data
+    const games = [
+      { icon: '🏃', title: 'Meta Parkour Rush', players: '2.4K', likes: '98%', bg: 'linear-gradient(135deg, #00A2FF, #0066cc)' },
+      { icon: '💰', title: 'Coin Collector VR', players: '1.8K', likes: '95%', bg: 'linear-gradient(135deg, #ffd700, #ffaa00)' },
+      { icon: '⚔️', title: 'Arena Battle Royale', players: '1.2K', likes: '94%', bg: 'linear-gradient(135deg, #fd79a8, #e84393)' },
+      { icon: '☄️', title: 'Asteroid Survival', players: '1.1K', likes: '92%', bg: 'linear-gradient(135deg, #ff4500, #8b0000)' },
+      { icon: '🏎️', title: 'Cyber Speed Race', players: '980', likes: '96%', bg: 'linear-gradient(135deg, #ff6b6b, #ee5a24)' },
+      { icon: '🗼', title: 'Tower Climb Challenge', players: '756', likes: '89%', bg: 'linear-gradient(135deg, #a29bfe, #6c5ce7)' }
+    ];
+
+    let currentSlide = 0;
+
+    // Initialize carousel
+    function initCarousel() {
+      const track = document.getElementById('carousel-track');
+      const nav = document.getElementById('carousel-nav');
+
+      slides.forEach((slide, index) => {
+        const slideEl = document.createElement('div');
+        slideEl.className = 'carousel-slide';
+        slideEl.onclick = () => goToLogin();
+        slideEl.innerHTML = `
+          <div class="slide-background" style="background: ${slide.bg};"></div>
+          <div class="game-preview">
+            <div class="preview-content">${slide.icon}</div>
+            <div class="preview-badge">PLAY NOW</div>
+          </div>
+          <div class="slide-content">
+            <div class="slide-icon">${slide.icon}</div>
+            <div class="slide-title">${slide.title}</div>
+            <div class="slide-desc">${slide.desc}</div>
+            <div class="slide-stats">
+              <div class="slide-stat">👥 ${slide.players} playing</div>
+              <div class="slide-stat">👍 ${slide.likes} liked this</div>
+            </div>
+          </div>
+        `;
+        track.appendChild(slideEl);
+
+        const dot = document.createElement('div');
+        dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(index);
+        nav.appendChild(dot);
+      });
+    }
+
+    // Initialize games grid
+    function initGamesGrid() {
+      const grid = document.getElementById('games-grid');
+      
+      games.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.onclick = () => goToLogin();
+        card.innerHTML = `
+          <div class="game-thumbnail" style="background: ${game.bg};">
+            ${game.icon}
+          </div>
+          <div class="game-info">
+            <div class="game-title">${game.title}</div>
+            <div class="game-stats">
+              <div class="game-stat">👥 ${game.players}</div>
+              <div class="game-stat">👍 ${game.likes}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function updateCarousel() {
+      const track = document.getElementById('carousel-track');
+      const dots = document.querySelectorAll('.carousel-dot');
+      
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateCarousel();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    function goToLogin() {
+      window.location.href = 'website777.html';
+    }
+
+    function goToHome() {
+      window.location.href = 'index.html';
+    }
+
+    function goToGame() {
+      window.location.href = 'web777game.html';
+    }
+
+    function checkLoginStatus() {
+      const activeUser = localStorage.getItem('game_active_user');
+      const userDataStr = localStorage.getItem('game_user');
+      
+      if (activeUser && userDataStr) {
+        // User is logged in
+        const userData = JSON.parse(userDataStr);
+        
+        // Avatar mapping
+        const avatarMap = {
+          'Cyber': '🤖', 'Astro': '🧑‍🚀', 'Dragon': '🐉', 
+          'Wizard': '🧙‍♂️', 'Ninja': '🥷', 'Samurai': '⚔️',
+          'Phoenix': '🔥', 'Frost': '❄️',
+          'Bot': '🤖', 'Guest': '👥'
+        };
+        
+        const icon = avatarMap[userData.avatar] || '🤖';
+        
+        // Show user profile, hide login buttons
+        document.getElementById('profile-avatar').innerText = icon;
+        document.getElementById('profile-name').innerText = userData.username;
+        document.getElementById('user-profile').style.display = 'flex';
+        document.getElementById('login-btn').style.display = 'none';
+        document.getElementById('signup-btn').style.display = 'none';
+      } else {
+        // User not logged in - show login buttons
+        document.getElementById('user-profile').style.display = 'none';
+        document.getElementById('login-btn').style.display = 'block';
+        document.getElementById('signup-btn').style.display = 'block';
+      }
+    }
+
+    // Auto-advance carousel
+    let carouselInterval = setInterval(nextSlide, 5000);
+
+    // Pause on hover
+    document.querySelector('.carousel-wrapper').addEventListener('mouseenter', () => {
+      clearInterval(carouselInterval);
+    });
+
+    document.querySelector('.carousel-wrapper').addEventListener('mouseleave', () => {
+      carouselInterval = setInterval(nextSlide, 5000);
+    });
+
+    // Initialize on load
+    window.onload = function() {
+      initCarousel();
+      initGamesGrid();
+      checkLoginStatus();
+      
+      // Register Service Worker for PWA
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('🎮 METAVERSE Service Worker registered'))
+          .catch(err => console.log('⚠️ Service Worker registration failed:', err));
+      }
+    };
+  </script>
+</body>
+</html>
